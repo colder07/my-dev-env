@@ -1,0 +1,28 @@
+{
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.trimAutoWhitespace": true,
+  "editor.insertFinalNewline": true,
+
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+
+  "terminal.integrated.defaultProfile.linux": "zsh",
+  "terminal.integrated.scrollback": 10000,
+
+  "git.autofetch": true,
+
+  "vim.useSystemClipboard": true,
+  "vim.hlsearch": true,
+  "vim.incsearch": true,
+  "vim.smartRelativeLine": true,
+
+  "python.analysis.typeCheckingMode": "basic",
+  "python.analysis.autoImportCompletions": true,
+
+  "ruff.nativeServer": true,
+
+  "eslint.format.enable": false,
+
+  "prettier.requireConfig": true
+}
