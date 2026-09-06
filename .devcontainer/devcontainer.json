@@ -22,11 +22,15 @@
       "moby": true,
       "installDockerBuildx": true,
       "dockerDashComposeVersion": "v2"
-    }
+    },
+    "ghcr.io/devcontainer-community/devcontainer-features/chezmoi.io:1.0.4": {}
   },
   "mounts": [
     "source=devcontainer-home-${devcontainerId},target=/home/vscode,type=volume"
   ],
+  "containerEnv": {
+    "DOTFILES_REPOSITORY": "${localEnv:DOTFILES_REPOSITORY}"
+  },
   "remoteUser": "vscode",
   "customizations": {
     "vscode": {
