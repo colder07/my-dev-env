@@ -9,7 +9,7 @@ services:
       redis:
         condition: service_healthy
     volumes:
-      - ..:/workspaces/my-dev-env:cached
+      - ..:/workspaces:cached
 
   postgres:
     image: postgres:17
