@@ -17,11 +17,7 @@ install_plugin() {
     fi
 
     echo "Installing Zsh plugin: $name"
-
-    git clone \
-        --depth=1 \
-        "$repo" \
-        "$target"
+    git clone --depth=1 "$repo" "$target"
 }
 
 mkdir -p "$PLUGIN_DIR"
@@ -54,13 +50,10 @@ text = zshrc.read_text()
 plugins = """plugins=(
   git
   docker
-  aws
-  terraform
   zsh-autosuggestions
   zsh-history-substring-search
 )"""
 
-# Replace the simple official "plugins=(git)" configuration.
 text, count = re.subn(
     r"^plugins=\(git\)$",
     plugins,
@@ -86,10 +79,17 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
 source "${{ZSH_CUSTOM:-$ZSH/custom}}/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 {marker_end}
 """
-
     text = text.rstrip() + block + "\n"
 
 zshrc.write_text(text)
 PY
 
-echo "Zsh setup complete."
+# Keep Rails outside $HOME so the persisted home volume contains only user state.
+if ! command -v rails >/dev/null 2>&1; then
+    echo "Installing Rails 8.1.3.1"
+    sudo gem install rails --version 8.1.3.1 --no-document
+else
+    echo "Rails already installed: $(rails --version)"
+fi
+
+echo "Zsh and Rails setup complete."
