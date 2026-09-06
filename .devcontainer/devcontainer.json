@@ -32,6 +32,13 @@
   },
   "mounts": [
     "source=devcontainer-home-${devcontainerId},target=/home/vscode,type=volume"
+
+    // === Custom workspace mounts ===
+    // Replace the source path with a REAL absolute path on your host, then uncomment.
+    // Keep target under /workspace and add one entry for each directory you want to share.
+    // Example:
+    // "source=/home/your-user/projects,target=/workspace/projects,type=bind,consistency=cached"
+    // "source=/home/your-user/data,target=/workspace/data,type=bind,consistency=cached"
   ],
   "containerEnv": {
     "DOTFILES_REPOSITORY": "${localEnv:DOTFILES_REPOSITORY}"

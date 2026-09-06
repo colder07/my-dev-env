@@ -15,6 +15,8 @@ Core runtimes and tools:
 - Git
 - Zsh + Oh My Zsh
 - Docker CLI + Buildx + Compose v2, using the host Docker daemon
+- PostgreSQL 17
+- Redis 8.10.1
 - chezmoi for optional personal dotfile management
 
 VS Code extensions:
@@ -52,6 +54,51 @@ Dev Containers: Reopen in Container
 
 The container is rebuilt from the configuration in `.devcontainer/devcontainer.json`.
 
+## Workspace
+
+The repository itself is mounted at:
+
+```text
+/workspaces/my-dev-env
+```
+
+### Add your own host directories
+
+Custom workspace mounts are configured directly in `.devcontainer/devcontainer.json`. You do not need to set an environment variable first.
+
+Find the `Custom workspace mounts` section and replace the example `source` path with a **real absolute path on your host**, then uncomment the entry:
+
+```jsonc
+"mounts": [
+  "source=devcontainer-home-${devcontainerId},target=/home/vscode,type=volume",
+
+  // Replace this with a real path on your host.
+  "source=/home/your-user/projects,target=/workspace/projects,type=bind,consistency=cached"
+]
+```
+
+For example, if your host directory is `/srv/projects`, use:
+
+```jsonc
+"source=/srv/projects,target=/workspace/projects,type=bind,consistency=cached"
+```
+
+You can add multiple directories by adding more mount entries:
+
+```jsonc
+"mounts": [
+  "source=devcontainer-home-${devcontainerId},target=/home/vscode,type=volume",
+  "source=/srv/projects,target=/workspace/projects,type=bind,consistency=cached",
+  "source=/srv/data,target=/workspace/data,type=bind,consistency=cached"
+]
+```
+
+After rebuilding the container, those host directories are available at `/workspace/projects`, `/workspace/data`, and so on.
+
+Use `/workspace/...` for additional host directories and keep the main repository under `/workspaces/...`. This keeps the standard Dev Container workspace separate from optional host directories.
+
+> The `source` path is resolved on the host, not inside the container. Use an absolute host path and only mount directories you trust the development container to access.
+
 ## Design
 
 This environment follows the official Dev Container pattern of composing a small base image with reusable Features:
@@ -63,11 +110,14 @@ Ubuntu / Dev Container base
         +-- Python Feature
         +-- Node.js Feature
         +-- Ruby Feature
+        +-- Rails Feature
         +-- Docker outside-of-Docker Feature
         +-- chezmoi Feature
         |
+        +-- PostgreSQL + Redis services
         +-- user state in persistent $HOME volume
         +-- optional personal dotfiles from a separate Git repository
+        +-- optional host directories under /workspace
 ```
 
 The Docker Feature exposes the host Docker socket rather than running a Docker daemon inside the development container.
@@ -114,7 +164,7 @@ If `DOTFILES_REPOSITORY` is not set, the template still provides the default Zsh
 
 For a private dotfiles repository, use an authentication method already available to Git/SSH rather than putting credentials in this repository. Do not commit secrets to the dotfiles repository; use chezmoi's supported secret-management/encryption mechanisms when sensitive configuration needs to be versioned.
 
-A good rule is: **put portable preferences in chezmoi, ephemeral state in the persistent home volume, and project/environment requirements in `devcontainer.json`.**
+A good rule is: **put portable preferences in chezmoi, ephemeral state in the persistent home volume, project/environment requirements in `devcontainer.json`, and optional host directories in `/workspace`.**
 
 ## Customization
 
@@ -122,6 +172,7 @@ The main configuration is:
 
 ```text
 .devcontainer/devcontainer.json
+.devcontainer/compose.yaml
 .devcontainer/zsh/install.sh
 .vscode/settings.json
 ```
@@ -157,6 +208,8 @@ Credentials are not copied into the image or repository.
 SSH private keys should remain on the host and be exposed through SSH agent forwarding when needed. AWS credentials should likewise be supplied explicitly rather than baked into the image.
 
 The dotfiles repository is also treated as user-controlled configuration. Only point `DOTFILES_REPOSITORY` at a repository you trust.
+
+Additional workspace mounts are also host-controlled bind mounts. Only mount directories that you trust the development container to access.
 
 ## Maintenance
 
