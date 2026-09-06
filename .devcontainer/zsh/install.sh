@@ -95,10 +95,10 @@ zshrc.write_text(text)
 PY
 fi
 
-# Keep Rails outside $HOME so the persisted home volume contains only user state.
+# Rails is installed system-wide by the Ruby Feature's non-root user setup.
 if ! command -v rails >/dev/null 2>&1; then
     echo "Installing Rails 8.1.3.1"
-    sudo gem install rails --version 8.1.3.1 --no-document
+    gem install rails --version 8.1.3.1 --no-document
 else
     echo "Rails already installed: $(rails --version)"
 fi
