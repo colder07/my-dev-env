@@ -1,0 +1,16 @@
+{
+  "id": "rails",
+  "version": "1.0.0",
+  "name": "Ruby on Rails",
+  "description": "Installs a pinned version of Ruby on Rails as part of the Dev Container image.",
+  "options": {
+    "version": {
+      "type": "string",
+      "default": "8.1.3.1",
+      "description": "The Rails version to install."
+    }
+  },
+  "installsAfter": [
+    "ghcr.io/devcontainers/features/ruby"
+  ]
+}
