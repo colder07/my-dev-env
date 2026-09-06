@@ -3,6 +3,9 @@ services:
     image: mcr.microsoft.com/devcontainers/base:noble
     init: true
     command: sleep infinity
+    depends_on:
+      - postgres
+      - redis
     volumes:
       - ..:/workspaces/my-dev-env:cached
 
