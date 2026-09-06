@@ -95,12 +95,4 @@ zshrc.write_text(text)
 PY
 fi
 
-# Rails is installed system-wide by the Ruby Feature's non-root user setup.
-if ! command -v rails >/dev/null 2>&1; then
-    echo "Installing Rails 8.1.3.1"
-    gem install rails --version 8.1.3.1 --no-document
-else
-    echo "Rails already installed: $(rails --version)"
-fi
-
-echo "Zsh, dotfiles, and Rails setup complete."
+echo "Zsh and dotfiles setup complete."
