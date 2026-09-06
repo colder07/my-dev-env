@@ -5,6 +5,7 @@ set -euo pipefail
 ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
 PLUGIN_DIR="$ZSH_CUSTOM/plugins"
 ZSHRC="$HOME/.zshrc"
+DOTFILES_REPOSITORY="${DOTFILES_REPOSITORY:-}"
 
 install_plugin() {
     local name="$1"
@@ -34,12 +35,21 @@ install_plugin \
     "zsh-history-substring-search" \
     "https://github.com/zsh-users/zsh-history-substring-search.git"
 
-if [ ! -f "$ZSHRC" ]; then
-    echo "ERROR: $ZSHRC does not exist."
-    exit 1
-fi
+if [ -n "$DOTFILES_REPOSITORY" ]; then
+    echo "Applying personal dotfiles with chezmoi: $DOTFILES_REPOSITORY"
 
-python3 - "$ZSHRC" <<'PY'
+    if [ -d "$HOME/.local/share/chezmoi/.git" ]; then
+        chezmoi update --apply
+    else
+        chezmoi init --apply "$DOTFILES_REPOSITORY"
+    fi
+else
+    if [ ! -f "$ZSHRC" ]; then
+        echo "ERROR: $ZSHRC does not exist."
+        exit 1
+    fi
+
+    python3 - "$ZSHRC" <<'PY'
 from pathlib import Path
 import re
 import sys
@@ -83,6 +93,7 @@ source "${{ZSH_CUSTOM:-$ZSH/custom}}/plugins/zsh-syntax-highlighting/zsh-syntax-
 
 zshrc.write_text(text)
 PY
+fi
 
 # Keep Rails outside $HOME so the persisted home volume contains only user state.
 if ! command -v rails >/dev/null 2>&1; then
@@ -92,4 +103,4 @@ else
     echo "Rails already installed: $(rails --version)"
 fi
 
-echo "Zsh and Rails setup complete."
+echo "Zsh, dotfiles, and Rails setup complete."
