@@ -5,3 +5,15 @@ services:
     command: sleep infinity
     volumes:
       - ..:/workspaces/my-dev-env:cached
+
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: vscode
+      POSTGRES_PASSWORD: vscode
+      POSTGRES_DB: development
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:
