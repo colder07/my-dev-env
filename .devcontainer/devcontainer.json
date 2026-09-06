@@ -20,6 +20,7 @@
         "ms-azuretools.vscode-docker"
       ]
     }
-  }
-}
+  },
 
+  "postCreateCommand": "bash ${containerWorkspaceFolder}/.devcontainer/zsh/install.sh"
+}
