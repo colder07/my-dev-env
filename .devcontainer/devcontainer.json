@@ -1,13 +1,33 @@
 {
-  "name": "Universal Dev Environment",
-
-  "image": "mcr.microsoft.com/devcontainers/universal:6",
-
+  "name": "My Dev Environment",
+  "image": "mcr.microsoft.com/devcontainers/base:noble",
   "features": {
-    "ghcr.io/devcontainers/features/aws-cli:1": {},
-    "ghcr.io/devcontainers/features/terraform:1": {}
+    "ghcr.io/devcontainers/features/common-utils:2.5.9": {
+      "configureZshAsDefaultShell": true,
+      "username": "vscode"
+    },
+    "ghcr.io/devcontainers/features/python:1.8.0": {
+      "version": "3.14",
+      "toolsToInstall": "ruff,pytest,mypy"
+    },
+    "ghcr.io/devcontainers/features/node:2.1.0": {
+      "version": "24",
+      "pnpmVersion": "latest",
+      "yarnVersion": "latest"
+    },
+    "ghcr.io/devcontainers/features/ruby:2.0.0": {
+      "version": "4.0"
+    },
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1.10.0": {
+      "moby": true,
+      "installDockerBuildx": true,
+      "dockerDashComposeVersion": "v2"
+    }
   },
-
+  "mounts": [
+    "source=devcontainer-home-${devcontainerId},target=/home/vscode,type=volume"
+  ],
+  "remoteUser": "vscode",
   "customizations": {
     "vscode": {
       "extensions": [
@@ -21,6 +41,5 @@
       ]
     }
   },
-
   "postCreateCommand": "bash ${containerWorkspaceFolder}/.devcontainer/zsh/install.sh"
 }
