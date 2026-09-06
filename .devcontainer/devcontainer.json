@@ -1,6 +1,8 @@
 {
   "name": "My Dev Environment",
-  "image": "mcr.microsoft.com/devcontainers/base:noble",
+  "dockerComposeFile": "compose.yaml",
+  "service": "dev",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
   "features": {
     "ghcr.io/devcontainers/features/common-utils:2.5.9": {
       "configureZshAsDefaultShell": true,

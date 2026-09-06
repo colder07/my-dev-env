@@ -1,0 +1,7 @@
+services:
+  dev:
+    image: mcr.microsoft.com/devcontainers/base:noble
+    init: true
+    command: sleep infinity
+    volumes:
+      - ..:/workspaces/my-dev-env:cached
